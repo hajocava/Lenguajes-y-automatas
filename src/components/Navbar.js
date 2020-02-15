@@ -1,15 +1,18 @@
 import React from 'react'
-import { Link } from 'react-scroll';
+import { Navbar, Nav } from 'react-bootstrap'
 
-export default function Nav() {
+export default function NavbarNav() {
     return (
-        <nav className="navbar navbar-expand fixed-top d-flex justify-content-between shadow-custom">
-            <label className="navbar-brand m-0">Proyecto</label>
-            <ul className="navbar-nav">
-                <li className="nav-item mr-4"><Link className="nav-link" to="services" spy={true} smooth={true} offset={-70} duration={500}>Arboles</Link></li>
-                <li className="nav-item mr-4"><Link className="nav-link" to="exp-reg" spy={true} smooth={true} offset={-70} duration={500}>Expresiones</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="build-form" spy={true} smooth={true} offset={-70} duration={500}>Analizador</Link></li>
-            </ul>
-        </nav>
+        <Navbar className="shadow-custom" fixed="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Brand href="#home">Proyecto</Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mr-auto">
+                    <Nav.Link href="#trees">Arboles</Nav.Link>
+                    <Nav.Link href="#exp-reg">Expresiones</Nav.Link>
+                    <Nav.Link href="#pricing">Analizador</Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
     )
 }

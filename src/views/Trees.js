@@ -95,11 +95,11 @@ export default function Trees() {
                 />
             </div>
             <div className="row mt-5">
-                <div className="col-6">
+                <div className="col-12 col-md-6 mb-4">
                     <h5 className="mb-3">Árbol de expresón</h5>
                     <Arbol />
                 </div>
-                <div className="col-6">
+                <div className="col-12 col-md-6">
                     <div className="row">
                         <div className="col-12">
                             <h5 className="mb-3">Recorridos</h5>
