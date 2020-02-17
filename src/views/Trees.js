@@ -35,7 +35,7 @@ export default function Trees() {
 
                 setNotaciones({
                     inorden: infijo,
-                    postorden : notacionSufija
+                    postorden: notacionSufija
                 })
 
                 const tree = BT.createTree(notacionSufija) // crea un arbol a partir de una notacion sufija (postfija)
@@ -77,15 +77,20 @@ export default function Trees() {
         <Fragment>
             <h2 className="mb-4">Arboles de expresiones</h2>
             <div>
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="expresion">Expresión</label>
-                        <input ref={textInput} type="text" className="form-control" id="expresion" placeholder="Ejemplo (A + B) * (C / D)" />
-                        <small id="emailHelp" className="form-text text-muted">La expresión debe ser ingresada en notacion infija.</small>
-                    </div>
-                    <button onClick={calculate} type="button" className="btn btn-primary mb-2">Calcular</button>
-                    <button onClick={clean} type="button" className="btn btn-primary mb-2 ml-3">Limpiar</button>
-                </form>
+                <div className="form-group">
+                    <label htmlFor="expresion">Expresión</label>
+                    <input
+                        onKeyPress={e => {e.key === 'Enter' && calculate()}}
+                        ref={textInput}
+                        type="text"
+                        className="form-control"
+                        id="expresion"
+                        placeholder="Ejemplo (A + B) * (C / D)"
+                    />
+                    <small id="emailHelp" className="form-text text-muted">La expresión debe ser ingresada en notacion infija.</small>
+                </div>
+                <button onClick={calculate} type="button" className="btn btn-primary mb-2">Calcular</button>
+                <button onClick={clean} type="button" className="btn btn-primary mb-2 ml-3">Limpiar</button>
                 <Toast
                     showToast={showToast}
                     setShowToast={setShowToast}
@@ -95,10 +100,6 @@ export default function Trees() {
                 />
             </div>
             <div className="row mt-5">
-                <div className="col-12 col-md-6 mb-4">
-                    <h5 className="mb-3">Árbol de expresón</h5>
-                    <Arbol />
-                </div>
                 <div className="col-12 col-md-6">
                     <div className="row">
                         <div className="col-12">
@@ -106,6 +107,10 @@ export default function Trees() {
                             {toShow()}
                         </div>
                     </div>
+                </div>
+                <div className="col-12 col-md-6 mb-4">
+                    <h5 className="mb-3">Árbol de expresón</h5>
+                    <Arbol />
                 </div>
             </div>
         </Fragment>
