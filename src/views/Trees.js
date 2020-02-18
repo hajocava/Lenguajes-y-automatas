@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useRef } from 'react'
+import Node from '../functions/Node'
 import Arbol from '../components/Arbol'
 import Recorridos from '../components/Recorridos'
 import BinaryTree from '../functions/BinaryTree'
@@ -8,6 +9,11 @@ import Loading from '../components/Loading'
 
 export default function Trees() {
     const textInput = useRef(null);
+
+
+    // const [tree, setTree] = useState([]);
+    const [nodeDataArray, setNodeDataArray] = useState([])
+    const [linkDataArray, setlinkDataArray] = useState([])
 
     const [state, setState] = useState({
         clear: true,
@@ -24,7 +30,58 @@ export default function Trees() {
     const [showToast, setShowToast] = useState(false);
     const toggleShowToast = () => setShowToast(!showToast);
 
+    function linkData(tree, array = [], linkDataNodes = []) {
+
+        if (typeof (tree) !== 'undefined') {
+
+            if (tree.left || tree.right) {
+                if (!(tree.left instanceof Node) && tree.length !== 0) {
+                    linkDataNodes.push({
+                        key: tree.data.key,
+                        from: tree.data.key,
+                        to: tree.left.key
+                    })
+                } else {
+                    linkDataNodes.push({
+                        key: tree.data.key,
+                        from: tree.data.key,
+                        to: tree.left.data.key
+                    })
+                }
+
+                if (!(tree.right instanceof Node) && tree.length !== 0) {
+                    linkDataNodes.push({
+                        key: tree.data.key,
+                        from: tree.data.key,
+                        to: tree.right.key
+                    })
+
+                } else {
+                    linkDataNodes.push({
+                        key: tree.data.key,
+                        from: tree.data.key,
+                        to: tree.right.data.key
+                    })
+                }
+
+                array.push(tree.data)
+            }
+
+            else {
+                array.push(tree)
+            }
+
+
+            linkData(tree.left, array, linkDataNodes)
+            linkData(tree.right, array, linkDataNodes)
+        }
+
+        return [array, linkDataNodes]
+    }
+
     async function calculate() {
+        setNodeDataArray([])
+        setlinkDataArray([])
         const infijo = textInput.current.value
 
         if (infijo.length > 1) {
@@ -39,7 +96,11 @@ export default function Trees() {
                 })
 
                 const tree = BT.createTree(notacionSufija) // crea un arbol a partir de una notacion sufija (postfija)
-                console.log(tree);
+
+                const [nodes, linksNodes] = linkData(tree)
+
+                setNodeDataArray(nodes)
+                setlinkDataArray(linksNodes)
 
                 setState({ loading: false, clear: false })
             }, 1000);
@@ -53,6 +114,8 @@ export default function Trees() {
     function clean() {
         textInput.current.value = ''
         setState({ loading: false, clear: true })
+        setNodeDataArray([])
+        setlinkDataArray([])
     }
 
     function toShow() {
@@ -80,7 +143,7 @@ export default function Trees() {
                 <div className="form-group">
                     <label htmlFor="expresion">Expresión</label>
                     <input
-                        onKeyPress={e => {e.key === 'Enter' && calculate()}}
+                        onKeyPress={e => { e.key === 'Enter' && calculate() }}
                         ref={textInput}
                         type="text"
                         className="form-control"
@@ -99,8 +162,8 @@ export default function Trees() {
                     body='Ingresa una expresión matematica correcta.'
                 />
             </div>
-            <div className="row mt-5">
-                <div className="col-12 col-md-6">
+            <div className="row ">
+                <div className="col-12 col-md-6 mt-4">
                     <div className="row">
                         <div className="col-12">
                             <h5 className="mb-3">Recorridos</h5>
@@ -108,9 +171,12 @@ export default function Trees() {
                         </div>
                     </div>
                 </div>
-                <div className="col-12 col-md-6 mb-4">
+                <div className="col-12 col-md-6 mb-4 mt-4 ">
                     <h5 className="mb-3">Árbol de expresón</h5>
-                    <Arbol />
+                    <Arbol
+                        nodeDataArray={nodeDataArray}
+                        linkDataArray={linkDataArray}
+                    />
                 </div>
             </div>
         </Fragment>

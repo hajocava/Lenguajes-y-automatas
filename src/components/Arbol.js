@@ -30,30 +30,18 @@ function initDiagram() {
 }
 
 
-export default function Arbol() {
+export default function Arbol({ nodeDataArray, linkDataArray }) {
     return (
-        <div style={{ minHeight: '200px' }} className="card-container d-flex justify-content-center align-items-center">
-            <ReactDiagram
-                initDiagram={initDiagram}
-                divClassName='diagram-component'
-                nodeDataArray={[
-                    { key: 0, text: '*' },
-                    { key: 1, text: '+' },
-                    { key: 2, text: 'a' },
-                    { key: 3, text: 'b' },
-                    { key: 4, text: '/' },
-                    { key: 5, text: 'c' },
-                    { key: 6, text: 'd' },
-                ]}
-                linkDataArray={[
-                    { key: -1, from: 0, to: 1 },
-                    { key: -2, from: 0, to: 4 },
-                    { key: -2, from: 1, to: 2 },
-                    { key: -2, from: 1, to: 3 },
-                    { key: -2, from: 4, to: 5 },
-                    { key: -2, from: 4, to: 6 },
-                ]}
-            />
+        <div style={{ minHeight: nodeDataArray.length === 0 ? '150px' : '250px' }} className="card-container d-flex justify-content-center align-items-center">
+            {nodeDataArray.length === 0 ? 'Ingresa una expresión para comenzar.' :
+                <ReactDiagram
+                    initDiagram={initDiagram}
+                    divClassName='diagram-component'
+                    nodeDataArray={nodeDataArray}
+                    linkDataArray={linkDataArray}
+                />
+            }
+
         </div>
     )
 }

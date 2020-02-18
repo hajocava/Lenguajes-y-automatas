@@ -28,32 +28,11 @@ export default class BinaryTree {
         else node.right = newNode;
     }
 
-    inOrder(node, fn) {
-        if (node !== null) {
-            this.inOrder(node.left, fn);
-            fn.call(null, node); // callBack
-            this.inOrder(node.right, fn);
-        }
-    }
-
-    preOrder(node, fn) {
-        if (node !== null) {
-            fn.call(null, node); // callBack
-            this.preOrder(node.left, fn);
-            this.preOrder(node.right, fn);
-        }
-    }
-
-    postOrder(node, fn) {
-        if (node !== null) {
-            this.postOrder(node.left, fn);
-            this.postOrder(node.right, fn);
-            fn.call(null, node); // callBack
-        }
-    }
-
     createTree(sufija) {
+        let contador = 0
+
         const stack = new Stack();
+
         let error = 0;
 
         for (let i = 0; i < sufija.length; i++) {
@@ -61,15 +40,22 @@ export default class BinaryTree {
                 const char = sufija[i];
 
                 // SI ES UN NUMERO, VARIABLE O UN ARBOL (OBJETO)
-                if (!isNaN(char) || esVariable(char) || typeof (char) == 'object') stack.push(char)
-                else if (char === '(') error = 2;
+                if (!isNaN(char) || esVariable(char) || typeof (char) == 'object')
+                    stack.push({
+                        key: contador++,
+                        text: char
+                    })
+
                 else if (esOperador(char)) {
                     if (sufija.length === 2) {
-                        const tree = new BinaryTree();
-                        tree.insert(char); // NODO RAIZ
-                        tree.insert(stack.pop()); // HIJO IZQUIERDO
-
-                        stack.push(tree);
+                        const node = new Node(
+                            {
+                                key: contador++,
+                                text: char
+                            },
+                            stack.pop()
+                        )
+                        stack.push(node);
 
                     } else if (stack.size() < 2) {
                         error = 3;
@@ -78,12 +64,16 @@ export default class BinaryTree {
                         const operador2 = stack.pop();
                         const operador1 = stack.pop();
 
-                        const tree = new BinaryTree();
-                        tree.insert(char); // NODO RAIZ
-                        tree.insert(operador1); // HIJO IZQUIERDO
-                        tree.insert(operador2, 'right'); // HIJO DERECHO
+                        const node = new Node(
+                            {
+                                key: contador++,
+                                text: char
+                            },
+                            operador1,
+                            operador2
+                        )
 
-                        stack.push(tree); // AGREGO EL ARBOL A LA PILA
+                        stack.push(node); // AGREGO EL ARBOL A LA PILA
                     }
                 }
             } else break;
@@ -101,23 +91,9 @@ export default class BinaryTree {
             while (stack.size() !== 0) { // MIENTRAS LA PILA TENGA ELEMENTOS
                 stack.pop(); // LIMPIAMOS LA PILA
             }
-        } else return stack.pop()
-    }
-
-    treeToInfija(tree) {
-        const rootNode = tree.getRootNode();
-        let array = [];
-
-        tree.inOrder(rootNode, node => array.push(node.data));
-        return this.aplanar(array)
-    }
-
-    aplanar(array) {
-        for (let i = 0; i < array.length; i++)
-            if (typeof (array[i]) === 'object')
-                array[i] = this.treeToInfija(array[i])
-
-        return array.flat()
+        } else {
+            return stack.pop()
+        }
     }
 
 }
