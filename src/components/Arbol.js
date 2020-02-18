@@ -32,7 +32,7 @@ function initDiagram() {
 
 export default function Arbol({ nodeDataArray, linkDataArray }) {
     return (
-        <div style={{ minHeight: nodeDataArray.length === 0 ? '150px' : '250px' }} className="card-container d-flex justify-content-center align-items-center">
+        <div style={{ minHeight: nodeDataArray.length === 0 ? '150px' : '250px' }} className="d-flex justify-content-center align-items-center">
             {nodeDataArray.length === 0 ? 'Ingresa una expresión para comenzar.' :
                 <ReactDiagram
                     initDiagram={initDiagram}
@@ -41,7 +41,6 @@ export default function Arbol({ nodeDataArray, linkDataArray }) {
                     linkDataArray={linkDataArray}
                 />
             }
-
         </div>
     )
 }

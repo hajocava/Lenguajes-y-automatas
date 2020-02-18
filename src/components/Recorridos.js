@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 export default function Recorridos({ notaciones }) {
     return (
-        <div className="card-container">
-            <p className="font-weight-bold">In-orden: <span className="font-weight-normal">{notaciones.inorden}</span></p>
-            <p className="font-weight-bold">Pre-orden: <span className="font-weight-normal">{notaciones.preorden}</span></p>
-            <p className="font-weight-bold">Post-orden: <span className="font-weight-normal">{notaciones.postorden}</span></p>
-            <p className="font-weight-bold">Niveles: <span className="font-weight-normal">{notaciones.niveles}</span></p>
+        <Fragment>
+            <p>In-orden: <span className="font-weight-bold">{notaciones.inorden}</span></p>
+            <p>Pre-orden: <span className="font-weight-bold">{notaciones.preorden}</span></p>
+            <p>Post-orden: <span className="font-weight-bold">{notaciones.postorden}</span></p>
+            <p>Niveles: <span className="font-weight-bold">{notaciones.niveles}</span></p>
 
-            <hr/>
+            <hr />
 
-            <p className="font-weight-bold mt-3">Altura: <span className="font-weight-normal">3</span></p>
-            <p className="font-weight-bold">Peso: <span className="font-weight-normal">7</span></p>
-        </div>
+            <p className="mt-3">Altura: <span className="font-weight-bold">{notaciones.altura}</span></p>
+            <p>Peso: <span className="font-weight-bold">{notaciones.peso}</span></p>
+        </Fragment>
     )
 }
