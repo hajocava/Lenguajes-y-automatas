@@ -3,7 +3,6 @@ import Node from '../functions/Node'
 import Arbol from '../components/Arbol'
 import Recorridos from '../components/Recorridos'
 import BinaryTree from '../functions/BinaryTree'
-import Toast from '../components/Toast'
 import { sufija } from '../functions/Notation'
 import Loading from '../components/Loading'
 
@@ -19,55 +18,65 @@ export default function Trees() {
         inorden: '',
         preorden: '',
         postorden: '',
-        niveles: '',
-        peso: '',
-        altura: ''
+        peso: ''
     })
 
     const [error, seterror] = useState(false);
     const toggleerror = () => seterror(!error);
 
-    function linkData(tree, array = [], linkDataNodes = []) {
+    function linkData(tree, array = [], linkDataNodes = [], preorden = []) {
+
         if (typeof (tree) !== 'undefined') {
             if (tree.left || tree.right) {
+
+                preorden.push(tree.data.text)
+
                 if (!(tree.left instanceof Node) && tree.length !== 0) {
                     linkDataNodes.push({
                         key: tree.data.key,
                         from: tree.data.key,
                         to: tree.left.key
                     })
+
+                    preorden.push(tree.left.text)
+
                 } else {
                     linkDataNodes.push({
                         key: tree.data.key,
                         from: tree.data.key,
                         to: tree.left.data.key
                     })
+
                 }
-                
+
                 if (!(tree.right instanceof Node) && tree.length !== 0) {
                     linkDataNodes.push({
                         key: tree.data.key,
                         from: tree.data.key,
                         to: tree.right.key
                     })
+
+                    preorden.push(tree.right.text)
+
                 } else {
                     linkDataNodes.push({
                         key: tree.data.key,
                         from: tree.data.key,
                         to: tree.right.data.key
                     })
+
                 }
-                
+
                 array.push(tree.data)
             }
-            
+
             else array.push(tree)
 
-            linkData(tree.left, array, linkDataNodes)
-            linkData(tree.right, array, linkDataNodes)
+            linkData(tree.left, array, linkDataNodes, preorden)
+            linkData(tree.right, array, linkDataNodes, preorden)
         }
 
-        return [array, linkDataNodes]
+        return [array, linkDataNodes, preorden]
     }
 
     async function calculate() {
@@ -83,12 +92,13 @@ export default function Trees() {
 
                 const tree = BT.createTree(notacionSufija) // crea un arbol a partir de una notacion sufija (postfija)
 
-                const [nodes, linksNodes] = linkData(tree)
+                const [nodes, linksNodes, preorden] = linkData(tree)
 
                 setNotaciones({
                     inorden: infijo,
                     postorden: notacionSufija,
-                    peso: nodes.length
+                    peso: nodes.length,
+                    preorden
                 })
                 setNodeDataArray(nodes)
                 setlinkDataArray(linksNodes)
@@ -154,8 +164,8 @@ export default function Trees() {
                     id="expresion"
                     placeholder="Ejemplo (A + B) * (C / D)"
                 />
-                {error && 
-                    <small style={{color: 'red'}} id="emailHelp" className="form-text text-danger">
+                {error &&
+                    <small style={{ color: 'red' }} id="emailHelp" className="form-text text-danger">
                         La expresión debe ser ingresada en notacion infija.
                     </small>
                 }

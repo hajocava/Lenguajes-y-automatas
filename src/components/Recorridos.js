@@ -6,11 +6,10 @@ export default function Recorridos({ notaciones }) {
             <p>In-orden: <span className="font-weight-bold">{notaciones.inorden}</span></p>
             <p>Pre-orden: <span className="font-weight-bold">{notaciones.preorden}</span></p>
             <p>Post-orden: <span className="font-weight-bold">{notaciones.postorden}</span></p>
-            <p>Niveles: <span className="font-weight-bold">{notaciones.niveles}</span></p>
 
             <hr />
 
-            <p className="mt-3">Altura: <span className="font-weight-bold">{notaciones.altura}</span></p>
+            {/* <p className="mt-3">Altura: <span className="font-weight-bold">{notaciones.altura}</span></p> */}
             <p>Peso: <span className="font-weight-bold">{notaciones.peso}</span></p>
         </Fragment>
     )
