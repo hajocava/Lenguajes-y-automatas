@@ -19,6 +19,7 @@ export default function RegExpresions() {
 
     const [state, setState] = useState({ clear: true, loading: false })
 
+
     function dibujarAutomata() {
         const regExpText = textInput.current.value
 
@@ -27,12 +28,12 @@ export default function RegExpresions() {
             setTimeout(() => {
                 const parser1 = new regParser.RegParser(textInput.current.value)
                 const parser2 = new regParser.RegParser(textInput.current.value)
-                
+
                 const nfa = parser1.parseToNFA();
                 const dfa = parser2.parseToDFA();
 
-                const graphNFA = Viz(nfa.toDotScript(), { format: "svg", engine: 'dot' });
-                const graphDFA = Viz(dfa.toDotScript(), { format: "svg", engine: 'dot' });
+                const graphNFA = Viz(nfa.toDotScript(), { format: "svg", engine: 'dot', autoResize: true});
+                const graphDFA = Viz(dfa.toDotScript(), { format: "svg", engine: 'dot', autoResize: true});
 
                 setAutomataNFA(graphNFA)
                 setAutomataDFA(graphDFA)
@@ -66,10 +67,9 @@ export default function RegExpresions() {
         else if (state.clear) return <p className="m-0">Ingresa una expresion regular para comenzar.</p>
         else return <div>
             <h5>Determinista</h5>
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataDFA) }} />
-            <hr/>
+            <div className="d-flex justify-content-center align-items-center" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataDFA) }} />
             <h5>No determinista</h5>
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataNFA) }} />
+            <div className="d-flex justify-content-center align-items-center" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataNFA) }} />
         </div>
     }
 
@@ -96,7 +96,7 @@ export default function RegExpresions() {
 
             <button onClick={dibujarAutomata} type="button" className="btn btn-primary mb-2">Calcular</button>
             <button onClick={clean} type="button" className="btn btn-primary mb-2 ml-3">Limpiar</button>
-            <div className="card-container mt-4 pt-5 pb-5 d-flex justify-content-center align-items-center">
+            <div className="card-container mt-4 pt-5 pb-5">
                 {toShow()}
             </div>
         </div>
