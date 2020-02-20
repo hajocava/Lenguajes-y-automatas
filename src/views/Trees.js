@@ -5,6 +5,8 @@ import Recorridos from '../components/Recorridos'
 import BinaryTree from '../functions/BinaryTree'
 import { sufija } from '../functions/Notation'
 import Loading from '../components/Loading'
+import { esOperador, esVariable } from '../functions/Notation'
+
 
 export default function Trees() {
     const textInput = useRef(null);
@@ -21,8 +23,10 @@ export default function Trees() {
         peso: ''
     })
 
-    const [error, seterror] = useState(false);
-    const toggleerror = () => seterror(!error);
+    const [error, seterror] = useState({
+        visible: false,
+        message: ''
+    });
 
     function linkData(tree, array = [], linkDataNodes = [], preorden = []) {
 
@@ -82,9 +86,13 @@ export default function Trees() {
     async function calculate() {
         setNodeDataArray([])
         setlinkDataArray([])
+        let flagError = false
         const infijo = textInput.current.value
 
-        if (infijo.length > 1) {
+        for (let i = 0; i < infijo.length; i++)
+            if (!(esOperador(infijo[i]) || esVariable(infijo[i]))) flagError = true
+
+        if (infijo.length > 1 && !flagError) {
             setState({ loading: true })
             setTimeout(() => {
                 const BT = new BinaryTree()
@@ -100,6 +108,7 @@ export default function Trees() {
                     peso: nodes.length,
                     preorden
                 })
+
                 setNodeDataArray(nodes)
                 setlinkDataArray(linksNodes)
 
@@ -107,8 +116,17 @@ export default function Trees() {
             }, 1500);
 
         } else {
-            toggleerror()
-            setTimeout(() => seterror(false), 3000);
+            setState({ clear: true, loading: false })
+
+            seterror({
+                visible: true,
+                message: 'La expresión debe ser ingresada en notacion infija.'
+            })
+
+            setTimeout(() => seterror({
+                visible: false,
+                message: ''
+            }), 3000);
         }
     }
 
@@ -127,7 +145,7 @@ export default function Trees() {
         )
 
         else if (state.clear) return (
-            <div style={{ height: '150px' }} className="card-container d-flex justify-content-center align-items-center">
+            <div className="card-container pt-5 pb-5 d-flex justify-content-center align-items-center">
                 <p className="m-0">Ingresa una expresión para comenzar.</p>
             </div>
         )
@@ -166,7 +184,7 @@ export default function Trees() {
                 />
                 {error &&
                     <small style={{ color: 'red' }} id="emailHelp" className="form-text text-danger">
-                        La expresión debe ser ingresada en notacion infija.
+                        {error.message}
                     </small>
                 }
             </div>
@@ -174,7 +192,6 @@ export default function Trees() {
             <button onClick={clean} type="button" className="btn btn-primary mb-2 ml-3">Limpiar</button>
             <div className="row">
                 <div className="col-12 mt-4">
-                    <h5 className="mb-3">Árbol de expresón</h5>
                     {toShow()}
                 </div>
             </div>

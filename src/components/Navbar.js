@@ -9,7 +9,7 @@ export default function NavbarNav() {
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="#trees">Arboles</Nav.Link>
-                    <Nav.Link href="#exp-reg">Expresiones</Nav.Link>
+                    <Nav.Link href="#exp-reg">Automatas</Nav.Link>
                     <Nav.Link href="#pricing">Analizador</Nav.Link>
                 </Nav>
             </Navbar.Collapse>

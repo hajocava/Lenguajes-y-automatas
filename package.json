@@ -7,18 +7,24 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "animejs": "^3.1.0",
+    "automata.js": "^0.2.1",
     "bootstrap": "^4.4.1",
+    "dompurify": "^2.0.8",
+    "events": "^3.1.0",
     "gojs": "^2.1.8",
     "gojs-react": "^1.0.5",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.12.0",
+    "react-html-parser": "^2.0.2",
     "react-scripts": "3.3.1",
-    "react-scroll": "^1.7.16"
+    "react-scroll": "^1.7.16",
+    "viz.js": "^1.8.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts --max_old_space_size=4096 start",
+    "predeploy": "react-scripts --max_old_space_size=4096 build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
