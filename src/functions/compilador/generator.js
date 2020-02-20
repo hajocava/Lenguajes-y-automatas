@@ -1,43 +1,57 @@
-export function generator (ast) {
-
-  function traverseSvgAst(obj, parent, rest, text) {
-    parent = parent || []
-    rest = rest || []
-    text = text || ''
-    if (!Array.isArray(obj)) {
-      obj = [obj]
-    }
-
-    while (obj.length > 0) {
-      var currentNode = obj.shift()
-      var body = currentNode.body || ''
-      var attr = Object.keys(currentNode.attr).map(function (key){
-        return key + '="' + currentNode.attr[key] + '"'
-      }).join(' ')
-
-      text += parent.map(function(){return '\t'}).join('') + '<' + currentNode.tag + ' ' + attr + '>'
-
-      if (currentNode.body && Array.isArray(currentNode.body) && currentNode.body.length > 0) {
-        text += '\n'
-        parent.push(currentNode.tag)
-        rest.push(obj)
-        return traverseSvgAst(currentNode.body, parent, rest, text)
+/**
+  ## Code Generator
+  At the final stop of abn to avg compile process, generator function created
+  SVG code based on given AST.
+  ### Parameter
+  - svg_ast `Object`: svg abstract syntax tree created by transformer function.
+  ### Return
+  SVG formatted string
+  ```
+  input: {
+    "tag": "svg",
+    "attr": {
+      "width": 100,
+      "height": 100,
+      "viewBox": "0 0 100 100",
+      "xmlns": "http://www.w3.org/2000/svg",
+      "version": "1.1"
+    },
+    "body": [{
+      "tag": "rect",
+      "attr": {
+        "x": 0,
+        "y": 0,
+        "width": 100,
+        "height": 100,
+        "fill": "rgb(0%, 0%, 0%)"
       }
+    }]
+  }
+  output:
+  <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <rect x="0" y="0" width="100" height="100" fill="rgb(0%, 0%, 0%)"></rect>
+  </svg>
+  ```
+*/
 
-      text += body + '</'+ currentNode.tag +'>\n'
-    }
+export function generator (svg_ast) {
 
-    while (rest.length > 0) {
-      var next = rest.pop()
-      var tag = parent.pop()
-      text += parent.map(function(){return '\t'}).join('') + '</'+ tag +'>\n'
-      if (next.length > 0) {
-        traverseSvgAst(next, parent, rest, text)
-      }
-    }
-
-    return text
+  // create attributes string out of attr object
+  // { "width": 100, "height": 100 } becomes 'width="100" height="100"'
+  function createAttrString (attr) {
+    return Object.keys(attr).map(function (key){
+      return key + '="' + attr[key] + '"'
+    }).join(' ')
   }
 
-  return traverseSvgAst(ast)
+  // top node is always <svg>. Create attributes string for svg tag
+  var svg_attr = createAttrString(svg_ast.attr)
+
+  // for each elements in the body of svg_ast, generate svg tag
+  var elements = svg_ast.body.map(function (node) {
+    return '<' + node.tag + ' ' + createAttrString(node.attr) + '></' + node.tag + '>'
+  }).join('\n\t')
+
+  // wrap with open and close svg tag to complete SVG code
+  return '<svg '+ svg_attr +'>\n' + elements + '\n</svg>'
 }

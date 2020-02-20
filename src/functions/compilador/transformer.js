@@ -1,51 +1,56 @@
+/**
+  ## Transformer
+  Parsed sbn AST is good at describing what's happening in the code,
+  but it is not useful yet to create SVG file out of it.
+  For example. `Paper` is a concept only exists in sbn paradigm.
+  In SVG, we might use <rect> element to represent a Paper. Transformer function
+  converts sbn specific AST to SVG friendly AST.
+  ### Parameter
+  - ast `Object`: sbn abstract syntax tree created by parser function.
+  ### Return
+  svg_ast object (another AST suited for SVG format)
+  ```
+  input: {
+    type: "Drawing",
+    "body": [{
+      "type": "CallExpression",
+      "name": "Paper",
+      "arguments": [
+        {
+          "type": "number",
+          "value": "100"
+        }
+      ]
+    }]
+  }
+  output: {
+    "tag": "svg",
+    "attr": {
+      "width": 100,
+      "height": 100,
+      "viewBox": "0 0 100 100",
+      "xmlns": "http://www.w3.org/2000/svg",
+      "version": "1.1"
+    },
+    "body": [{
+      "tag": "rect",
+      "attr": {
+        "x": 0,
+        "y": 0,
+        "width": 100,
+        "height": 100,
+        "fill": "rgb(0%, 0%, 0%)"
+      }
+    }]
+  }
+  ```
+  ### Notes
+  color code 100 means 100% black === rgb(0%, 0%, 0%)
+*/
+
 export function transformer (ast) {
 
-  function makeColor (level) {
-    if (typeof level === 'undefined') {
-      level = 100
-    }
-    level = 100 - parseInt(level, 10) // flip
-    return 'rgb(' + level + '%, ' + level + '%, ' + level + '%)'
-  }
-
-  function findParamValue (p) {
-    if (p.type === 'word') {
-      return variables[p.value]
-    }
-    return p.value
-  }
-
-  var elements = {
-    'Line' : function (param, pen_color_value) {
-      return {
-        tag: 'line',
-        attr: {
-          x1: findParamValue(param[0]),
-          y1: 100 - findParamValue(param[1]),
-          x2: findParamValue(param[2]),
-          y2: 100 - findParamValue(param[3]),
-          stroke: makeColor(pen_color_value),
-          'stroke-linecap': 'round'
-        },
-        body: []
-      }
-    },
-    'Paper' : function (param) {
-      return {
-        tag : 'rect',
-        attr : {
-          x: 0,
-          y: 0,
-          width: 100,
-          height:100,
-          fill: makeColor(findParamValue(param[0]))
-        },
-        body : []
-      }
-    }
-  }
-
-  var newAST = {
+  var svg_ast = {
     tag : 'svg',
     attr: {
       width: 100,
@@ -57,31 +62,47 @@ export function transformer (ast) {
     body:[]
   }
 
-  var current_pen_color
-  // TODO : warning when paper and pen is same color
+  var pen_color = 100 // default pen color is black
 
-  var variables = {}
-
+  // Extract a call expression at a time as `node`.
+  // Loop until we are out of expressions in body.
   while (ast.body.length > 0) {
     var node = ast.body.shift()
-    if(node.type === 'CallExpression' || node.type === 'VariableDeclaration') {
-      if(node.name === 'Pen') {
-        current_pen_color = findParamValue(node.arguments[0])
-      } else if (node.name === 'Set') {
-        variables[node.identifier.value] = node.value.value
-      } else {
-        var el = elements[node.name]
-        if (!el) {
-          throw node.name + ' is not a valid command.'
-        }
-        if (typeof !current_pen_color === 'undefined') {
-          // throw 'Please define Pen before drawing Line.'
-          // TODO : message 'You should define Pen before drawing Line'
-        }
-        newAST.body.push(el(node.arguments, current_pen_color))
-      }
+    switch (node.name) {
+      case 'Paper' :
+        var paper_color = 100 - node.arguments[0].value
+        // add rect element information to svg_ast's body
+        svg_ast.body.push({
+          tag : 'rect',
+          attr : {
+            x: 0,
+            y: 0,
+            width: 100,
+            height:100,
+            fill: 'rgb(' + paper_color + '%,' + paper_color + '%,' + paper_color + '%)'
+          }
+        })
+        break
+      case 'Pen':
+        // keep current pen color in `pen_color` variable
+        pen_color = 100 - node.arguments[0].value
+        break
+      case 'Line':
+        // add line element information to svg_ast's body
+        svg_ast.body.push({
+          tag: 'line',
+          attr: {
+            x1: node.arguments[0].value,
+            y1: node.arguments[1].value,
+            x2: node.arguments[2].value,
+            y2: node.arguments[3].value,
+            'stroke-linecap': 'round',
+            stroke: 'rgb(' + pen_color + '%,' + pen_color + '%,' + pen_color + '%)'
+          }
+        })
+        break
     }
   }
 
-  return newAST
+  return svg_ast
 }
