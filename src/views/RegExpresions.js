@@ -14,7 +14,8 @@ export default function RegExpresions() {
         message: ''
     });
 
-    const [automata, setAutomata] = useState(null)
+    const [automataNFA, setAutomataNFA] = useState(null)
+    const [automataDFA, setAutomataDFA] = useState(null)
 
     const [state, setState] = useState({ clear: true, loading: false })
 
@@ -24,11 +25,17 @@ export default function RegExpresions() {
         if (regExpText.length > 0) {
             setState({ loading: true })
             setTimeout(() => {
-                const parser = new regParser.RegParser(textInput.current.value)
-                const nfa = parser.parseToNFA();
-                const graph = Viz(nfa.toDotScript(), { format: "svg", engine: 'dot' });
+                const parser1 = new regParser.RegParser(textInput.current.value)
+                const parser2 = new regParser.RegParser(textInput.current.value)
+                
+                const nfa = parser1.parseToNFA();
+                const dfa = parser2.parseToDFA();
 
-                setAutomata(graph)
+                const graphNFA = Viz(nfa.toDotScript(), { format: "svg", engine: 'dot' });
+                const graphDFA = Viz(dfa.toDotScript(), { format: "svg", engine: 'dot' });
+
+                setAutomataNFA(graphNFA)
+                setAutomataDFA(graphDFA)
 
                 setState({ loading: false })
             }, 1500);
@@ -57,7 +64,13 @@ export default function RegExpresions() {
     function toShow() {
         if (state.loading) return <Loading />
         else if (state.clear) return <p className="m-0">Ingresa una expresion regular para comenzar.</p>
-        else return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automata) }} />
+        else return <div>
+            <h5>Determinista</h5>
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataDFA) }} />
+            <hr/>
+            <h5>No determinista</h5>
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataNFA) }} />
+        </div>
     }
 
 
@@ -80,6 +93,7 @@ export default function RegExpresions() {
                     </small>
                 }
             </div>
+
             <button onClick={dibujarAutomata} type="button" className="btn btn-primary mb-2">Calcular</button>
             <button onClick={clean} type="button" className="btn btn-primary mb-2 ml-3">Limpiar</button>
             <div className="card-container mt-4 pt-5 pb-5 d-flex justify-content-center align-items-center">
