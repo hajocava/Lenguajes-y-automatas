@@ -78,7 +78,7 @@ export default function RegExpresions() {
         <div id="exp-reg" data-spy="scroll">
             <h2 className="mt-4 mb-4">Automatas</h2>
             <div className="form-group">
-                <label htmlFor="regExp">Expresion regular</label>
+                <label htmlFor="regExp">Expresión regular</label>
                 <input
                     onKeyPress={e => { e.key === 'Enter' && dibujarAutomata() }}
                     ref={textInput}

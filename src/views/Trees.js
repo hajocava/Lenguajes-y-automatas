@@ -1,11 +1,11 @@
 import React, { Fragment, useState, useRef } from 'react'
-import Node from '../functions/Node'
+import Node from '../functions/trees/Node'
 import Arbol from '../components/Arbol'
 import Recorridos from '../components/Recorridos'
-import BinaryTree from '../functions/BinaryTree'
-import { sufija } from '../functions/Notation'
+import BinaryTree from '../functions/trees/BinaryTree'
+import { sufija } from '../functions/trees/Notation'
 import Loading from '../components/Loading'
-import { esOperador, esVariable } from '../functions/Notation'
+import { esOperador, esVariable } from '../functions/trees/Notation'
 
 
 export default function Trees() {

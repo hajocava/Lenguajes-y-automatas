@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="app">
       <Navbar />
-      <main className="container">
+      <main className="container" style={{marginBottom: '5rem'}}>
         <Trees />
         <hr className="mt-5" />
         <RegExp />

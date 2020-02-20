@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/styles.sass';
 import './styles/spiner.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

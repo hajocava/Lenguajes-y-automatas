@@ -10,7 +10,7 @@ export default function NavbarNav() {
                 <Nav className="mr-auto">
                     <Nav.Link href="#trees">Arboles</Nav.Link>
                     <Nav.Link href="#exp-reg">Automatas</Nav.Link>
-                    <Nav.Link href="#pricing">Analizador</Nav.Link>
+                    <Nav.Link href="#analizador">Analizador</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
