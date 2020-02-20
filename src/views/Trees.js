@@ -87,15 +87,9 @@ export default function Trees() {
     async function calculate() {
         setNodeDataArray([])
         setlinkDataArray([])
-        let flagError = false
         let infijo = textInput.current.value
-        
-        infijo = infijo.replace(/ /g, ""); // ELIMINO ESPACIOS ENTRE CARACTERES
 
-        for (let i = 0; i < infijo.length; i++)
-            if (!(esOperador(infijo[i]) || esVariable(infijo[i]))) flagError = true
-
-        if (infijo.length > 1 && !flagError) {
+        if (infijo.length > 1) {
             setState({ loading: true })
             setTimeout(() => {
                 const BT = new BinaryTree()
