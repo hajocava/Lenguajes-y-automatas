@@ -117,7 +117,7 @@ export default function Analizador() {
                 </div>
                 <div className="col-12 col-md-6 col-lg-4 mt-4">
                     <div className="card-container">
-                        <h5>Parsed AST</h5>
+                        <h5>Árbol de sintaxis</h5>
                         <CodeMirror
                             value={sbnast.value}
                             options={{ lineNumbers: true, readOnly: true }}
@@ -126,7 +126,7 @@ export default function Analizador() {
                 </div>
                 <div className="col-12 col-md-6 col-lg-4 mt-4">
                     <div className="card-container">
-                        <h5>Transformed AST</h5>
+                        <h5>Transformación</h5>
                         <CodeMirror
                             value={svgast.value}
                             options={{ lineNumbers: true, readOnly: true }}
@@ -135,7 +135,7 @@ export default function Analizador() {
                 </div>
                 <div className="col-12 col-md-6 col-lg-12 mt-4">
                     <div className="card-container">
-                        <h5>Generated Code</h5>
+                        <h5>Codigo generado</h5>
                         <CodeMirror
                             value={svgtext.value}
                             options={{ lineNumbers: true, readOnly: true }}
