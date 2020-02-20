@@ -1,4 +1,5 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { animeIn } from '../animations/Views';
 import Node from '../functions/trees/Node'
 import Arbol from '../components/Arbol'
 import Recorridos from '../components/Recorridos'
@@ -169,8 +170,10 @@ export default function Trees() {
         )
     }
 
+    useEffect(() => animeIn(), []);
+
     return (
-        <Fragment>
+        <div id="arboles" className="component-view">
             <h2 className="mb-4">Arboles de expresiones</h2>
             <div className="form-group">
                 <label htmlFor="expresion">Expresión infija</label>
@@ -195,6 +198,6 @@ export default function Trees() {
                     {toShow()}
                 </div>
             </div>
-        </Fragment>
+        </div>
     )
 }

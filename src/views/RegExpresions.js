@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { animeIn } from '../animations/Views';
 import regParser from 'automata.js'
 import Viz from 'viz.js';
 import DOMPurify from 'dompurify';
@@ -73,9 +74,10 @@ export default function RegExpresions() {
         </div>
     }
 
+    useEffect(() => animeIn(), []);
 
     return (
-        <div id="exp-reg" data-spy="scroll">
+        <div id="exp-reg" data-spy="scroll" className="component-view">
             <h2 className="mt-4 mb-4">Automatas</h2>
             <div className="form-group">
                 <label htmlFor="regExp">Expresión regular</label>

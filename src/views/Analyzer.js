@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { animeIn } from '../animations/Views';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import compiler from '../functions/compilador/compiler'
 import 'codemirror/mode/xml/xml'
@@ -84,10 +85,11 @@ export default function Analizador() {
 
     useEffect(() => {
         draw(code.value)
+        animeIn()
     }, []);
 
     return (
-        <div id="analizador" data-spy="scroll">
+        <div id="analizador" data-spy="scroll" className="component-view">
             <h2 className="mt-4">Analizador sintactico y semantico</h2>
             <div className="row mt-4">
                 <div className="col-12 col-md-8 col-lg-9">
