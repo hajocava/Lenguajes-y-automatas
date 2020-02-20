@@ -64,7 +64,7 @@ export default function RegExpresions() {
 
     function toShow() {
         if (state.loading) return <Loading />
-        else if (state.clear) return <p className="m-0">Ingresa una expresion regular para comenzar.</p>
+        else if (state.clear) return <p className="d-flex justify-content-center align-items-center m-0">Ingresa una expresion regular para comenzar.</p>
         else return <div>
             <h5>Determinista</h5>
             <div className="d-flex justify-content-center align-items-center" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(automataDFA) }} />
