@@ -88,7 +88,9 @@ export default function Trees() {
         setNodeDataArray([])
         setlinkDataArray([])
         let flagError = false
-        const infijo = textInput.current.value
+        let infijo = textInput.current.value
+        
+        infijo = infijo.replace(/ /g, ""); // ELIMINO ESPACIOS ENTRE CARACTERES
 
         for (let i = 0; i < infijo.length; i++)
             if (!(esOperador(infijo[i]) || esVariable(infijo[i]))) flagError = true
