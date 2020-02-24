@@ -1,4 +1,4 @@
-# Arboles binarios, expresiones regulares, automatas, analizador lexico, sintactico y semantico
+# Lenguajes y automatas
 
 Cuenta con 3 componetes principales.
 
